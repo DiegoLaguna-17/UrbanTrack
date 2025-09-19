@@ -66,7 +66,7 @@ class _AgregarAdminFormState extends State<AgregarAdminForm> {
     
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:3000/users/admin'),
+        Uri.parse('https://utbackend-xn26.onrender.com/users/admin'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(adminData),
       );
@@ -120,7 +120,6 @@ class _AgregarAdminFormState extends State<AgregarAdminForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE1F5FE), // Celeste muy claro
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -140,7 +139,7 @@ class _AgregarAdminFormState extends State<AgregarAdminForm> {
                 style: TextStyle(
                   fontSize: 18, 
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF0D47A1), // Azul oscuro
+                  color: Color.fromARGB(255,10,128,251), // Azul oscuro
                 ),
               ),
               const SizedBox(height: 20),
@@ -151,7 +150,7 @@ class _AgregarAdminFormState extends State<AgregarAdminForm> {
                 style: TextStyle(
                   fontSize: 16, 
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF0D47A1), // Azul oscuro
+                  color: Colors.black, // Azul oscuro
                 ),
               ),
               const SizedBox(height: 8),
@@ -160,7 +159,7 @@ class _AgregarAdminFormState extends State<AgregarAdminForm> {
                 decoration: InputDecoration(
                   hintText: 'Ingrese el nombre de usuario',
                   border: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Color(0xFF1976D2)), // Azul oscuro brillante
+                    borderSide: const BorderSide(color: Colors.black), // Azul oscuro brillante
                     borderRadius: BorderRadius.circular(8),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -178,7 +177,7 @@ class _AgregarAdminFormState extends State<AgregarAdminForm> {
                 style: TextStyle(
                   fontSize: 16, 
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF0D47A1), // Azul oscuro
+                  color: Colors.black, // Azul oscuro
                 ),
               ),
               const SizedBox(height: 8),
@@ -188,7 +187,7 @@ class _AgregarAdminFormState extends State<AgregarAdminForm> {
                 decoration: InputDecoration(
                   hintText: 'Ingrese la contraseña',
                   border: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Color(0xFF1976D2)), // Azul oscuro brillante
+                    borderSide: const BorderSide(color: Colors.black), // Azul oscuro brillante
                     borderRadius: BorderRadius.circular(8),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -206,7 +205,7 @@ class _AgregarAdminFormState extends State<AgregarAdminForm> {
                 style: TextStyle(
                   fontSize: 16, 
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF0D47A1), // Azul oscuro
+                  color: Colors.black, // Azul oscuro
                 ),
               ),
               const SizedBox(height: 8),
@@ -255,7 +254,7 @@ class _AgregarAdminFormState extends State<AgregarAdminForm> {
                   ElevatedButton(
                     onPressed: _isSubmitting ? null : _registrarAdministrador,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0D47A1), // Azul oscuro
+                      backgroundColor: const Color.fromARGB(255,95,255,18), // Azul oscuro
                       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -273,7 +272,7 @@ class _AgregarAdminFormState extends State<AgregarAdminForm> {
                         : const Text(
                             'Registrar', 
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 16,
                             ),
                           ),

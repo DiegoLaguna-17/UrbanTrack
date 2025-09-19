@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
       };
       
       final response = await http.post(
-        Uri.parse('http://localhost:3000/auth/login'),
+        Uri.parse('https://utbackend-xn26.onrender.com/auth/login'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(loginData),
       );
@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 200 && responseData['success'] == true) {
         final user = responseData['user'];
         final userType = user['tipo'];
-        
+        int id=user['id'];
         // Mostrar diálogo de éxito
         AwesomeDialog(
           context: context,
@@ -65,9 +65,9 @@ class _LoginPageState extends State<LoginPage> {
               context,
               MaterialPageRoute(builder: (context) {
                 if (userType == 'administrador') {
-                  return const HomeAdmin();
+                  return  HomeAdmin(idAdmin:id);
                 } else if (userType == 'cliente') {
-                  return const HomeCliente();
+                  return  HomeCliente(idCliente:id);
                 } else {
                   return const LoginPage();
                 }

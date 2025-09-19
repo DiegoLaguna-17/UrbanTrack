@@ -4,9 +4,12 @@ import 'package:urban_track/Administrador/CrearEncuesta/pregunta_escala.dart';
 import 'package:urban_track/Administrador/CrearEncuesta/pregunta_multiple.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:awesome_dialog/awesome_dialog.dart';
+
 
 class CrearEncuestaPage extends StatefulWidget {
-  const CrearEncuestaPage({super.key});
+  final int idAdmin;
+  const CrearEncuestaPage({required this.idAdmin});
 
   @override
   State<CrearEncuestaPage> createState() => _CrearEncuestaPageState();
@@ -44,6 +47,7 @@ class _CrearEncuestaPageState extends State<CrearEncuestaPage> {
       final response =
           await http.get(Uri.parse('https://utbackend-xn26.onrender.com/proyectos'));
       if (response.statusCode == 200) {
+
         final List data = jsonDecode(response.body);
         setState(() {
           proyectos = data.map((e) => {'id': e['id'], 'nombre': e['nombre']}).toList();
@@ -54,7 +58,15 @@ class _CrearEncuestaPageState extends State<CrearEncuestaPage> {
         setState(() => loadingProyectos = false);
       }
     } catch (e) {
-      print('Error de conexión: $e');
+
+       AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          animType: AnimType.bottomSlide,
+          title: 'Error',
+          desc: 'Error al obtener proyectos',
+          btnOkOnPress: () {},
+        ).show();
       setState(() => loadingProyectos = false);
     }
   }
@@ -176,6 +188,8 @@ class _CrearEncuestaPageState extends State<CrearEncuestaPage> {
   }
 
   Future<void> crearEncuesta() async {
+
+    
     if (_isSubmitting) return;
     if (selectedProject == null || tituloController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -194,11 +208,22 @@ class _CrearEncuestaPageState extends State<CrearEncuestaPage> {
                   }
                   return <String, dynamic>{};
                 }).toList();
+    if(preguntasData.isEmpty){
+       AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          animType: AnimType.bottomSlide,
+          title: 'Error',
+          desc: 'La encuesta no tiene preguntas',
+          btnOkOnPress: () {},
+        ).show();
+        return;
+    }
 
     final body = {
       "titulo": tituloController.text,
       "proyectoId": int.parse(selectedProject!),
-      "administradorId":1,//ESTO SE HA DE CAMBIAR LUEGO DEL LOGIN PARA LOS ADMIN
+      "administradorId":widget.idAdmin,//ESTO SE HA DE CAMBIAR LUEGO DEL LOGIN PARA LOS ADMIN
       "preguntas": preguntasData,
     };
 
@@ -210,9 +235,28 @@ class _CrearEncuestaPageState extends State<CrearEncuestaPage> {
       );
       
       if (response.statusCode == 200) {
-        showCustomDialog(context, true); // éxito
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          animType: AnimType.bottomSlide,
+          title: '¡Éxito!',
+          desc: 'Encuesta Creada Correctamente',
+          btnOkOnPress: () {
+          },
+        ).show(); // éxito
+        preguntasWidgets.clear();
+        tituloController.clear();
+        selectedProject=null;
       } else {
-        showCustomDialog(context, false); // error
+         AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          animType: AnimType.bottomSlide,
+          title: 'Error',
+          desc: 'Error al crear encuesta:',
+          btnOkOnPress: () {},
+        ).show();
+        // error
       }
     } catch (e) {
       showDialog(

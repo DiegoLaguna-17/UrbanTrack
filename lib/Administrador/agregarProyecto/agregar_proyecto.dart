@@ -47,7 +47,7 @@ class _AgregarProyectoPageState extends State<AgregarProyectoPage> {
       };
       
       final response = await http.post(
-        Uri.parse('http://localhost:3000/proyectos'),
+        Uri.parse('https://utbackend-xn26.onrender.com/proyectos'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(proyectoData),
       );
@@ -101,7 +101,6 @@ class _AgregarProyectoPageState extends State<AgregarProyectoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE8F5E9), // Verde claro
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -119,7 +118,7 @@ class _AgregarProyectoPageState extends State<AgregarProyectoPage> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B5E20), // Verde oscuro
+                  color: Color.fromARGB(255,10,128,251), // Verde oscuro
                 ),
               ),
               const SizedBox(height: 20),
@@ -130,7 +129,7 @@ class _AgregarProyectoPageState extends State<AgregarProyectoPage> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B5E20), // Verde oscuro
+                  color: Colors.black, // Verde oscuro
                 ),
               ),
               const SizedBox(height: 8),
@@ -178,7 +177,7 @@ class _AgregarProyectoPageState extends State<AgregarProyectoPage> {
                   ElevatedButton(
                     onPressed: _isSubmitting ? null : _registrarProyecto,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1B5E20), // Verde oscuro
+                      backgroundColor: Color.fromARGB(255,95,255,18), // Verde oscuro
                       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -196,7 +195,7 @@ class _AgregarProyectoPageState extends State<AgregarProyectoPage> {
                         : const Text(
                             'Registrar',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 16,
                             ),
                           ),

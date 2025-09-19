@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:urban_track/login.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:urban_track/Cliente/Responder/listaEncuestas.dart';
+import 'package:urban_track/Cliente/Respuestas/respuestas.dart';
+class HomeCliente extends StatefulWidget {
+  final int idCliente;
+  const HomeCliente({required this.idCliente});
 
-class HomeCliente extends StatelessWidget {
-  const HomeCliente({super.key});
+  @override
+  State<HomeCliente> createState() => _HomeClienteState();
+}
 
+class _HomeClienteState extends State<HomeCliente> {
+    int _currentIndex = 0;
+
+  void _handleBottomNavTap(int index) {
+    if (index == 2) {
+      _cerrarSesion(context);
+    } else {
+      setState(() => _currentIndex = index);
+    }
+  }
   void _cerrarSesion(BuildContext context) {
     AwesomeDialog(
       context: context,
@@ -29,35 +45,35 @@ class HomeCliente extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget body;
+    if (_currentIndex == 0) {
+      body =EncuestasTab(idCliente:widget.idCliente);
+    } else if (_currentIndex == 1) {
+      body = RespuestasTab(idCliente: widget.idCliente);
+    } 
+    else {
+      body = const Center(child: Text("Otra pestaña", style: TextStyle(fontSize: 24)));
+    }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cliente - UrbanTrack'),
-        backgroundColor: const Color.fromARGB(255, 74, 175, 76),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () => _cerrarSesion(context),
-          ),
+         elevation: 0,
+        toolbarHeight: 0,
+      ),
+      body: body,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex < 3 ? _currentIndex : 0, 
+        onTap: _handleBottomNavTap, 
+        backgroundColor: Colors.white,
+        selectedItemColor: const Color.fromARGB(255, 10, 128, 251),
+        unselectedItemColor: Colors.grey,
+        elevation: 8,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.file_copy), label: "Responder"),
+          BottomNavigationBarItem(icon: Icon(Icons.file_download), label: "Respuestas"),
+          BottomNavigationBarItem(icon: Icon(Icons.logout), label: "Salir"),
         ],
       ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.person, size: 80, color: Colors.green),
-            SizedBox(height: 20),
-            Text(
-              'Bienvenido Cliente',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Aquí verás tus encuestas disponibles',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
+      
     );
   }
 }

@@ -132,7 +132,7 @@ class _VerResultadosState extends State<VerResultados> {
     });
     try {
       final response = await http.get(Uri.parse(
-          'http://localhost:3000/encuestas/${widget.encuestaId}/resultados'));
+          'https://utbackend-xn26.onrender.com/encuestas/${widget.encuestaId}/resultados'));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);

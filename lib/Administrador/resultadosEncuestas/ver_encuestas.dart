@@ -58,7 +58,7 @@ class _VerEncuestasState extends State<VerEncuestas> {
       _isLoading = true;
     });
     try {
-      String url = "http://localhost:3000/encuestas/all";
+      String url = "https://utbackend-xn26.onrender.com/encuestas/all";
       if (projectId != null) {
         url += "?proyectoId=$projectId";
       }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:urban_track/Administrador/resultadosEncuestas/ver_resultados.dart';
 
 class VerEncuestas extends StatefulWidget {
   const VerEncuestas({super.key});
@@ -88,6 +89,7 @@ class _VerEncuestasState extends State<VerEncuestas> {
                           ),
                           trailing: ElevatedButton(
                             onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => VerResultados(encuestaId: encuesta['id'], encuestaTitulo: encuesta['titulo'],)));
                               print('Ver respuestas para: ${encuesta['titulo']}');
                             },
                             style: ElevatedButton.styleFrom(

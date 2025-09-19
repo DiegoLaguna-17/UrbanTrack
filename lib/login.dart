@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                 if (userType == 'administrador') {
                   return const HomeAdmin();
                 } else if (userType == 'cliente') {
-                  return const HomeCliente();
+                  return const HomeCliente(clienteId: 10,); //OJO ELIMINAR ID -> return const HomeCliente();
                 } else {
                   return const LoginPage();
                 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urban_track/Cliente/homeCliente.dart';
 import 'package:urban_track/login.dart';
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Admin',
       debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
+      home: const LoginPage()
     );
   }
 }

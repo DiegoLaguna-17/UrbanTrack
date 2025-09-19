@@ -31,6 +31,34 @@ class PreguntaOpcionMultipleData {
   }
 }
 
+class PreguntaEscalaData {
+  final int id;
+  final String titulo;
+  final String tipo;
+  final int totalRespuestas;
+  final List<OpcionData> opciones;
+
+  PreguntaEscalaData({
+    required this.id,
+    required this.titulo,
+    required this.tipo,
+    required this.totalRespuestas,
+    required this.opciones,
+  });
+
+  factory PreguntaEscalaData.fromJson(Map<String, dynamic> json) {
+    return PreguntaEscalaData(
+      id: json['idpregunta'],
+      titulo: json['pregunta'],
+      tipo: json['tipo'],
+      totalRespuestas: json['total_respuestas'],
+      opciones: (json['opciones'] as List)
+          .map((op) => OpcionData.fromJson(op))
+          .toList(),
+    );
+  }
+}
+
 class OpcionData {
   final String opcion;
   final int conteo;
@@ -88,6 +116,7 @@ class VerResultados extends StatefulWidget {
 class _VerResultadosState extends State<VerResultados> {
   int totalRespuestas = 0;
   List<PreguntaOpcionMultipleData> preguntasOpcionMultiple = [];
+  List<PreguntaEscalaData> preguntasEscala = [];
   List<PreguntaAbiertaData> preguntasAbiertas = [];
   bool isLoading = true;
 
@@ -102,16 +131,23 @@ class _VerResultadosState extends State<VerResultados> {
       isLoading = true;
     });
     try {
-      final response = await http.get(Uri.parse('https://utbackend-xn26.onrender.com/encuestas/${widget.encuestaId}/resultados'));
+      final response = await http.get(Uri.parse(
+          'http://localhost:3000/encuestas/${widget.encuestaId}/resultados'));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
         setState(() {
           totalRespuestas = data['totalRespuestas'];
-          
+
           preguntasOpcionMultiple = (data['preguntasOpcionMultiple'] as List)
               .map((p) => PreguntaOpcionMultipleData.fromJson(p))
               .toList();
+
+          if (data['preguntasEscala'] != null) {
+            preguntasEscala = (data['preguntasEscala'] as List)
+                .map((p) => PreguntaEscalaData.fromJson(p))
+                .toList();
+          }
 
           preguntasAbiertas = (data['preguntasAbiertas'] as List)
               .map((p) => PreguntaAbiertaData.fromJson(p))
@@ -147,7 +183,8 @@ class _VerResultadosState extends State<VerResultados> {
                     return PieChartSectionData(
                       color: Colors.primaries[index % Colors.primaries.length],
                       value: opcion.porcentaje,
-                      title: '${opcion.opcion}\n${opcion.porcentaje.toStringAsFixed(1)}%',
+                      title:
+                          '${opcion.opcion}\n${opcion.porcentaje.toStringAsFixed(1)}%',
                       radius: 50,
                       titleStyle: const TextStyle(
                         fontSize: 12,
@@ -167,7 +204,7 @@ class _VerResultadosState extends State<VerResultados> {
     );
   }
 
-  Widget buildBarChart(PreguntaOpcionMultipleData pregunta) {
+  Widget buildBarChart(PreguntaEscalaData pregunta) {
     return AspectRatio(
       aspectRatio: 1.3,
       child: Card(
@@ -191,7 +228,8 @@ class _VerResultadosState extends State<VerResultados> {
                         barRods: [
                           BarChartRodData(
                             toY: opcion.porcentaje,
-                            color: Colors.primaries[index % Colors.primaries.length],
+                            color: Colors
+                                .primaries[index % Colors.primaries.length],
                             width: 15,
                             borderRadius: BorderRadius.circular(4),
                           ),
@@ -208,13 +246,15 @@ class _VerResultadosState extends State<VerResultados> {
                             return SideTitleWidget(
                               meta: meta,
                               space: 4,
-                              child: Text(opcion.opcion, style: const TextStyle(fontSize: 10)),
+                              child: Text(opcion.opcion,
+                                  style: const TextStyle(fontSize: 10)),
                             );
                           },
                         ),
                       ),
                       leftTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: true, interval: 20, reservedSize: 44),
+                        sideTitles: SideTitles(
+                            showTitles: true, interval: 20, reservedSize: 44),
                       ),
                       topTitles: const AxisTitles(
                         sideTitles: SideTitles(showTitles: false),
@@ -257,8 +297,6 @@ class _VerResultadosState extends State<VerResultados> {
     );
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -284,13 +322,17 @@ class _VerResultadosState extends State<VerResultados> {
                         children: [
                           const Text(
                             'Total de Respuestas',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 10),
                           Text(
                             totalRespuestas.toString(),
-                            style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.blue),
+                            style: const TextStyle(
+                                fontSize: 48,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue),
                           ),
                         ],
                       ),
@@ -307,15 +349,18 @@ class _VerResultadosState extends State<VerResultados> {
                         children: [
                           Text(
                             pregunta.titulo,
-                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 10),
                           ...pregunta.respuestas.map((respuesta) {
                             return Card(
                               elevation: 2,
-                              margin: const EdgeInsets.symmetric(vertical: 4.0),
+                              margin:
+                                  const EdgeInsets.symmetric(vertical: 4.0),
                               child: ListTile(
-                                leading: const Icon(Icons.chat_bubble_outline, color: Colors.grey),
+                                leading: const Icon(Icons.chat_bubble_outline,
+                                    color: Colors.grey),
                                 title: Text(respuesta),
                               ),
                             );
@@ -324,23 +369,42 @@ class _VerResultadosState extends State<VerResultados> {
                         ],
                       );
                     }),
-              
                   if (preguntasOpcionMultiple.isNotEmpty)
                     ...preguntasOpcionMultiple.map((pregunta) {
-                      if (pregunta.opciones.isEmpty || pregunta.totalRespuestas == 0) {
+                      if (pregunta.opciones.isEmpty ||
+                          pregunta.totalRespuestas == 0) {
                         return const SizedBox.shrink();
                       }
                       return Column(
                         children: [
                           Text(
                             pregunta.titulo,
-                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 20),
                           SizedBox(
                             height: 300,
                             child: buildPieChart(pregunta),
+                          ),
+                          const Divider(height: 40),
+                        ],
+                      );
+                    }),
+                  if (preguntasEscala.isNotEmpty)
+                    ...preguntasEscala.map((pregunta) {
+                      if (pregunta.opciones.isEmpty ||
+                          pregunta.totalRespuestas == 0) {
+                        return const SizedBox.shrink();
+                      }
+                      return Column(
+                        children: [
+                          Text(
+                            pregunta.titulo,
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 20),
                           SizedBox(

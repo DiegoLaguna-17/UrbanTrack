@@ -93,7 +93,7 @@ class _VerEncuestasState extends State<VerEncuestas> {
                               print('Ver respuestas para: ${encuesta['titulo']}');
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.lightGreen,
+                              backgroundColor: Color.fromARGB(255, 95, 255, 18),
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),

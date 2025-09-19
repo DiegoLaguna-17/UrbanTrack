@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:urban_track/login.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'listaEncuestas/encuestas.dart';
 
 class HomeCliente extends StatelessWidget {
-  const HomeCliente({super.key});
+  final int clienteId; //OJO PARA PRODUCTO FINAL ELIMINAR ESTA LINEA
+  const HomeCliente({super.key, required this.clienteId}); //OJO PARA PRODUCTO FINAL ELIMINAR EL CAMPO ID -> const HomeCliente({super.key});
 
   void _cerrarSesion(BuildContext context) {
     AwesomeDialog(
@@ -40,24 +42,7 @@ class HomeCliente extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.person, size: 80, color: Colors.green),
-            SizedBox(height: 20),
-            Text(
-              'Bienvenido Cliente',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Aquí verás tus encuestas disponibles',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
+      body: EncuestasPage(clienteId: clienteId),
     );
   }
 }

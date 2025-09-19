@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:urban_track/Administrador/CrearEncuesta/crearEncuesta.dart';
 import 'package:urban_track/Administrador/agregarUsuario/agregar_usuario.dart';
+import 'package:urban_track/Administrador/resultadosEncuestas/ver_encuestas.dart';
 import 'package:urban_track/login.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
@@ -49,7 +50,7 @@ class _HomeAdminState extends State<HomeAdmin> {
 
     Widget body;
     if (_currentIndex == 0) {
-      body = const Center(child: Text("Encuestas publicadas", style: TextStyle(fontSize: 24)));
+      body = const VerEncuestas();
     } else if (_currentIndex == 1) {
       body = const CrearEncuestaPage();
     } else if (_currentIndex == 2) {

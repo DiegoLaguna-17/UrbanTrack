@@ -25,7 +25,7 @@ class _VerEncuestasState extends State<VerEncuestas> {
       isLoading = true;
     });
     try {
-      final response = await http.get(Uri.parse("http://localhost:3000/encuestas/all"));
+      final response = await http.get(Uri.parse("https://utbackend-xn26.onrender.com/encuestas/all"));
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         setState(() {

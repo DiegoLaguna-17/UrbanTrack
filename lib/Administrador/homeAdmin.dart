@@ -5,7 +5,8 @@ import 'package:urban_track/login.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 class HomeAdmin extends StatefulWidget {
-  const HomeAdmin({super.key});
+  final int idAdmin;
+  const HomeAdmin({required this.idAdmin});
 
   @override
   State<HomeAdmin> createState() => _HomeAdminState();
@@ -51,7 +52,7 @@ class _HomeAdminState extends State<HomeAdmin> {
     if (_currentIndex == 0) {
       body = const Center(child: Text("Encuestas publicadas", style: TextStyle(fontSize: 24)));
     } else if (_currentIndex == 1) {
-      body = const CrearEncuestaPage();
+      body = CrearEncuestaPage(idAdmin:widget.idAdmin);
     } else if (_currentIndex == 2) {
       body = const AgregarUsuarioPage();
     } else {

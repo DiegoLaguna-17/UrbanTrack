@@ -9,7 +9,6 @@ class AgregarUsuarioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE1F5FE),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -22,7 +21,7 @@ class AgregarUsuarioPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20, 
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: Colors.black,
               ),
               textAlign: TextAlign.center,
             ),
@@ -37,7 +36,7 @@ class AgregarUsuarioPage extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+                backgroundColor: Color.fromARGB(255,95,255,18),
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -46,11 +45,11 @@ class AgregarUsuarioPage extends StatelessWidget {
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.business, color: Colors.white),
+                  Icon(Icons.business, color: Colors.black),
                   SizedBox(width: 10),
                   Text(
                     'Agregar Proyecto',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
                 ],
               ),
@@ -79,7 +78,7 @@ class AgregarUsuarioPage extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 10, 128, 251),
+                backgroundColor: Color.fromARGB(255,10,128,251),
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -109,7 +108,7 @@ class AgregarUsuarioPage extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 74, 175, 76),
+                backgroundColor: Color.fromARGB(255,95,255,18),
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -118,11 +117,11 @@ class AgregarUsuarioPage extends StatelessWidget {
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.person, color: Colors.white),
+                  Icon(Icons.person, color: Colors.black),
                   SizedBox(width: 10),
                   Text(
                     'Agregar Cliente',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
                 ],
               ),

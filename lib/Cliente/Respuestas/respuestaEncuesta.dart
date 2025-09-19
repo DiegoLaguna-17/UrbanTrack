@@ -70,6 +70,7 @@ class _RespuestasPageState extends State<RespuestasPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(elevation: 0,
         toolbarHeight: 0,),
       body: FutureBuilder<List<Respuesta>>(
@@ -110,7 +111,7 @@ class _RespuestasPageState extends State<RespuestasPage> {
                     final r = respuestas[index];
                     return Card(
                       margin: const EdgeInsets.all(8),
-                      color: Colors.blue.shade50,
+                      color: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.all(12),
                         child: Column(
@@ -120,14 +121,16 @@ class _RespuestasPageState extends State<RespuestasPage> {
                               "${index + 1}. ${r.pregunta}",
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                                fontSize: 20,
                               ),
                             ),
                             const SizedBox(height: 6),
                             if (r.tipo == "abierta")
-                              Text("Respuesta: ${r.respuestaTexto ?? '-'}"),
+                              Text("Respuesta: ${r.respuestaTexto ?? '-'}",style: TextStyle(fontSize: 16),),
                             if (r.tipo == "escala")
-                              Text("Seleccionado: ${r.opcionSeleccionada ?? '-'}"),
+                              Text("Seleccionado: ${r.opcionSeleccionada ?? '-'}",style: TextStyle(fontSize: 16),),
+                            if (r.tipo == "opcion_multiple")
+                              Text("Seleccionado: ${r.opcionSeleccionada ?? '-'}",style: TextStyle(fontSize: 16),),
                           ],
                         ),
                       ),

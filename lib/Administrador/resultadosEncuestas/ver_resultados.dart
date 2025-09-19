@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fl_chart/fl_chart.dart';
 
-class PreguntaData {
+class PreguntaOpcionMultipleData {
   final int id;
   final String titulo;
   final String tipo;
   final int totalRespuestas;
   final List<OpcionData> opciones;
 
-  PreguntaData({
+  PreguntaOpcionMultipleData({
     required this.id,
     required this.titulo,
     required this.tipo,
@@ -18,8 +18,8 @@ class PreguntaData {
     required this.opciones,
   });
 
-  factory PreguntaData.fromJson(Map<String, dynamic> json) {
-    return PreguntaData(
+  factory PreguntaOpcionMultipleData.fromJson(Map<String, dynamic> json) {
+    return PreguntaOpcionMultipleData(
       id: json['idpregunta'],
       titulo: json['pregunta'],
       tipo: json['tipo'],
@@ -46,9 +46,27 @@ class OpcionData {
     return OpcionData(
       opcion: json['opcion'],
       conteo: json['conteo'],
-      porcentaje: json['porcentaje'] is int
-          ? (json['porcentaje'] as int).toDouble()
-          : json['porcentaje'],
+      porcentaje: (json['porcentaje'] ?? 0.0).toDouble(),
+    );
+  }
+}
+
+class PreguntaAbiertaData {
+  final int id;
+  final String titulo;
+  final List<String> respuestas;
+
+  PreguntaAbiertaData({
+    required this.id,
+    required this.titulo,
+    required this.respuestas,
+  });
+
+  factory PreguntaAbiertaData.fromJson(Map<String, dynamic> json) {
+    return PreguntaAbiertaData(
+      id: json['idpregunta'],
+      titulo: json['pregunta'],
+      respuestas: List<String>.from(json['respuestas']),
     );
   }
 }
@@ -69,7 +87,8 @@ class VerResultados extends StatefulWidget {
 
 class _VerResultadosState extends State<VerResultados> {
   int totalRespuestas = 0;
-  List<PreguntaData> preguntas = [];
+  List<PreguntaOpcionMultipleData> preguntasOpcionMultiple = [];
+  List<PreguntaAbiertaData> preguntasAbiertas = [];
   bool isLoading = true;
 
   @override
@@ -89,8 +108,13 @@ class _VerResultadosState extends State<VerResultados> {
         final Map<String, dynamic> data = jsonDecode(response.body);
         setState(() {
           totalRespuestas = data['totalRespuestas'];
-          preguntas = (data['preguntas'] as List)
-              .map((p) => PreguntaData.fromJson(p))
+          
+          preguntasOpcionMultiple = (data['preguntasOpcionMultiple'] as List)
+              .map((p) => PreguntaOpcionMultipleData.fromJson(p))
+              .toList();
+
+          preguntasAbiertas = (data['preguntasAbiertas'] as List)
+              .map((p) => PreguntaAbiertaData.fromJson(p))
               .toList();
         });
         print('Resultados obtenidos con éxito');
@@ -106,7 +130,7 @@ class _VerResultadosState extends State<VerResultados> {
     }
   }
 
-  Widget buildPieChart(PreguntaData pregunta) {
+  Widget buildPieChart(PreguntaOpcionMultipleData pregunta) {
     return AspectRatio(
       aspectRatio: 1.3,
       child: Card(
@@ -143,7 +167,7 @@ class _VerResultadosState extends State<VerResultados> {
     );
   }
 
-  Widget buildBarChart(PreguntaData pregunta) {
+  Widget buildBarChart(PreguntaOpcionMultipleData pregunta) {
     return AspectRatio(
       aspectRatio: 1.3,
       child: Card(
@@ -233,6 +257,7 @@ class _VerResultadosState extends State<VerResultados> {
     );
   }
 
+  
 
   @override
   Widget build(BuildContext context) {
@@ -241,10 +266,6 @@ class _VerResultadosState extends State<VerResultados> {
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back),
-          style: IconButton.styleFrom(
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-          ),
         ),
         title: Text(widget.encuestaTitulo),
       ),
@@ -264,6 +285,7 @@ class _VerResultadosState extends State<VerResultados> {
                           const Text(
                             'Total de Respuestas',
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 10),
                           Text(
@@ -274,46 +296,61 @@ class _VerResultadosState extends State<VerResultados> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
-
-                  if (preguntas.isEmpty)
-                    const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: Text(
-                          'No hay respuestas de opción múltiple para mostrar.',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    )
-                  else
-                  ...preguntas.map((pregunta) {
-                    if (pregunta.opciones.isEmpty || pregunta.totalRespuestas == 0) {
-                      return const SizedBox.shrink();
-                    }
-                    return Column(
-                      children: [
-                        Text(
-                          pregunta.titulo,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 10),
-                        SizedBox(
-                          height: 300,
-                          width: 500, 
-                          child: buildPieChart(pregunta),
-                        ),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          height: 300,
-                          width: 500,
-                          child: buildBarChart(pregunta),
-                        ),
-                        const Divider(height: 40),
-                      ],
-                    );
-                  }),
+                  const Divider(height: 40),
+                  if (preguntasAbiertas.isNotEmpty)
+                    ...preguntasAbiertas.map((pregunta) {
+                      if (pregunta.respuestas.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            pregunta.titulo,
+                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          ...pregunta.respuestas.map((respuesta) {
+                            return Card(
+                              elevation: 2,
+                              margin: const EdgeInsets.symmetric(vertical: 4.0),
+                              child: ListTile(
+                                leading: const Icon(Icons.chat_bubble_outline, color: Colors.grey),
+                                title: Text(respuesta),
+                              ),
+                            );
+                          }),
+                          const Divider(height: 40),
+                        ],
+                      );
+                    }),
+              
+                  if (preguntasOpcionMultiple.isNotEmpty)
+                    ...preguntasOpcionMultiple.map((pregunta) {
+                      if (pregunta.opciones.isEmpty || pregunta.totalRespuestas == 0) {
+                        return const SizedBox.shrink();
+                      }
+                      return Column(
+                        children: [
+                          Text(
+                            pregunta.titulo,
+                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            height: 300,
+                            child: buildPieChart(pregunta),
+                          ),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            height: 300,
+                            child: buildBarChart(pregunta),
+                          ),
+                          const Divider(height: 40),
+                        ],
+                      );
+                    }),
                 ],
               ),
             ),
